@@ -1,28 +1,42 @@
 <template>
+<!-- 3. template部：コンポーネント名をHTMLタグとして記述 -->
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <NavigationBar />
+
+    <!-- URLによって適切なコンポーネントを表示 -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// 1. script部：外部ファイルに分離されたコンポーネントをApp.vueへ読み込み
+import NavigationBar from '@/components/NavigationBar.vue'
 
+// 2. script部：使用するコンポーネントの宣言
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NavigationBar,
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
 }
+button.transparent {
+    margin: 5px;
+    background: transparent;
+    border: none;
+  }
+  input.transparent {
+    width: 100%;
+    border: none;
+  }
+  input.transparent:focus {
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
 </style>
