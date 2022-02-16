@@ -53,11 +53,12 @@ export default {
         children : [],
       })
     },
-    onDeleteNote : function(deleteNote) {
+    onDeleteNote : function(parentNote, note) {
+      const targetList = parentNote == null ? this.noteList : parentNote.children;
       // indexOf関数を使って対象のノートがリストの何番目にあるかを判定
-      const index = this.noteList.indexOf(deleteNote);
+      const index = targetList.indexOf(note);
       // splice関数を使って指定した番号の要素をリストから削除
-      this.noteList.splice(index, 1);
+      targetList.splice(index, 1);
     },
     onEditNoteStart : function(editNote) {
       // noteList配列の中の値を取り出してidが一致するものはtrue,それ以外はfalseに。

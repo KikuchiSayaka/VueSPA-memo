@@ -22,7 +22,7 @@
           <div class="button-icon" @click="onClickChildNote(note)"><i class="fas fa-sitemap"></i></div>
           <div class="button-icon"><i class="fas fa-plus-circle"></i></div>
           <div class="button-icon" @click="onClickEdit(note)"><i class="fas fa-edit"></i></div>
-          <div class="button-icon" @click="onClickDelete(note)"><i class="fas fa-trash"></i></div>
+          <div class="button-icon" @click="onClickDelete(parentNote, note)"><i class="fas fa-trash"></i></div>
         </div>
       </template>
     </div>
@@ -31,6 +31,7 @@
         <NoteItem
           v-for="childNote in note.children"
           v-bind:note="childNote"
+          v-bind:parentNote="note"
           v-bind:key="childNote.id"
           @delete="onClickDelete"
           @editStart="onClickEdit"
@@ -47,6 +48,7 @@ export default {
   name: 'NoteItem',
   props: [
     'note',
+    'parentNote',
   ],
   methods: {
     onMouseOver : function() {
@@ -56,10 +58,10 @@ export default {
       this.note.mouseover = false;
     },
     // ノートコンポーネントで削除ボタンが押されたことを、呼び出し元のメインページ側に伝える
-    onClickDelete : function(note) {
+    onClickDelete : function(parentNote, note) {
       // $emitはVue.jsの組み込み関数で、呼び出し元にイベントの発火を知らせる。引数1にイベント名を入れ、引数2以降は以降は,つなぎで一緒に渡したい、送りたい値を入れられる。
       // あるあるの書き方。this.$emit('イベント名', 引数)
-      this.$emit('delete', note);
+      this.$emit('delete', parentNote, note);
     },
     // 編集ボタンを押すと、この関数が呼び出される。ここで、$emit関数によって呼び出し元にイベントの発火を知らせる。
     onClickEdit : function(note) {
