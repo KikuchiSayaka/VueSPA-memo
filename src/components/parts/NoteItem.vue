@@ -6,12 +6,14 @@
     v-bind:class="{mouseover: note.mouseover && !note.editing}"
   >
 
+    <!-- templateタグはvueのコード場は存在しても、 表示要素からは消える性質なので、divタグなどに書かず、ここにv-ifを書く -->
+    <!-- 編集中の場合は<input>要素を、表示 -->
     <template v-if="note.editing">
         <input v-model="note.name" class="transparent" @keypress.enter="onEditEnd" />
     </template>
-
+    <!-- 編集中ではないときはノート名＋ボタンを表示 -->
     <template v-else>
-    <!-- 新規ノート作成されると、ここに新規ノートがその名前で表示される -->
+      <!-- 新規ノート作成されると、ここに新規ノートがその名前で表示される -->
       <div class="note-icon">
         <i class="fas fa-file-alt"></i>
       </div>
@@ -42,9 +44,11 @@ export default {
     },
     // ノートコンポーネントで削除ボタンが押されたことを、呼び出し元のメインページ側に伝える
     onClickDelete : function(note) {
-      // $emitはVue.jsの組み込み関数で、呼び出し元にイベントの発火を知らせる。引数1にイベント名を入れ、引数2以降は以降は,つなぎで一緒に渡したい値を送れる
+      // $emitはVue.jsの組み込み関数で、呼び出し元にイベントの発火を知らせる。引数1にイベント名を入れ、引数2以降は以降は,つなぎで一緒に渡したい、送りたい値を入れられる。
+      // あるあるの書き方。this.$emit('イベント名', 引数)
       this.$emit('delete', note);
     },
+    // 編集ボタンを押すと、この関数が呼び出される。ここで、$emit関数によって呼び出し元にイベントの発火を知らせる。
     onClickEdit : function(note) {
       this.$emit('editStart', note);
     },

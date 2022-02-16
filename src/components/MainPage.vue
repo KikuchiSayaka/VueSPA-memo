@@ -1,14 +1,15 @@
 // Topページ
 <template>
   <div class="main-page">
-    <!-- 左メニュー -->
+<!-- 画面左側のサイドメニュー。
+        メモの名称編集時、Enterキーを押さないでも入力窓以外をクリックしたら編集完了にするため、@click.self="onEditNoteEnd()"を追加。また、普通に@click=""だと 子要素の編集ボタンが押されただけで編集完了になってしまうので、それを防ぐために@click.self=""でそれ自身が呼ばれたら、と指定する。 -->
     <div class="left-menu" @click.self="onEditNoteEnd()">
       <!-- @deleteでNoteItemコンポーネントで削除ボタンが押された場合、受け取ってonDeleteNoteに渡す -->
         <!--
-        1. 削除ボタンをクリックするとonClickDelete関数が呼ばれる
-        2. $emitを使ってdeleteイベントを発火させ、ノート情報を渡す
-        3. MainPage.vue側で@deleteに紐付けられたonDeleteNote関数が呼ばれる
-        4. ノートリストの中から、渡されたノート情報に該当する要素を削除する
+            1. 削除ボタンをクリックするとonClickDelete関数が呼ばれる
+            2. $emitを使ってdeleteイベントを発火させ、NoteItem.vueからMainPage.vueへnote情報を渡す
+            3. MainPage.vue側でイベント発火を@deleteで受けると@deleteに紐付けられたonDeleteNote関数が呼ばれる
+            4. ノートリストの中から、渡されたnote情報に該当する要素を削除する
         -->
       <NoteItem
         v-for="note in noteList"
@@ -24,6 +25,8 @@
       </button>
     </div>
 
+<!-- 画面の右側
+      メモの名称編集時、Enterキーを押さないでも入力窓以外をクリックしたら編集完了にするため、@click.self="onEditNoteEnd()"を追加。-->
     <div class="right-view" @click.self="onEditNoteEnd()">
       右ビュー
     </div>
@@ -55,6 +58,7 @@ export default {
       this.noteList.splice(index, 1);
     },
     onEditNoteStart : function(editNote) {
+      // noteList配列の中の値を取り出してidが一致するものはtrue,それ以外はfalseに。
       for (let note of this.noteList) {
         note.editing = (note.id === editNote.id);
       }
