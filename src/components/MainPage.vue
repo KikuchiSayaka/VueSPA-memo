@@ -60,15 +60,19 @@ export default {
       // splice関数を使って指定した番号の要素をリストから削除
       targetList.splice(index, 1);
     },
-    onEditNoteStart : function(editNote) {
+    onEditNoteStart : function(editNote, parentNote) {
+      const targetList = parentNote == null ? this.noteList : parentNote.children;
       // noteList配列の中の値を取り出してidが一致するものはtrue,それ以外はfalseに。
-      for (let note of this.noteList) {
+      for (let note of targetList) {
         note.editing = (note.id === editNote.id);
+        this.onEditNoteStart(editNote, note);
       }
     },
-    onEditNoteEnd : function() {
-      for (let note of this.noteList) {
-          note.editing = false;
+    onEditNoteEnd : function(parentNote) {
+      const targetList = parentNote == null ? this.noteList : parentNote.children;
+      for (let note of targetList) {
+        note.editing = false;
+        this.onEditNoteEnd(note);
       }
     },
     onAddChildNote : function(note) {
