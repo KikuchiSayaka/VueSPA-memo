@@ -19,7 +19,7 @@
         <div class="note-name">{{note.name}}</div>
           <!-- マウスオーバーするとこのアイコンが右側に並ぶ -->
         <div class="buttons" v-show="note.mouseover">
-          <div class="button-icon" @click="onClickChildNote(note)"><i class="fas fa-sitemap"></i></div>
+          <div class="button-icon" v-if="layer < 3" @click="onClickChildNote(note)"><i class="fas fa-sitemap"></i></div>
           <div class="button-icon"><i class="fas fa-plus-circle"></i></div>
           <div class="button-icon" @click="onClickEdit(note)"><i class="fas fa-edit"></i></div>
           <div class="button-icon" @click="onClickDelete(parentNote, note)"><i class="fas fa-trash"></i></div>
@@ -31,6 +31,7 @@
         <NoteItem
           v-for="childNote in note.children"
           v-bind:note="childNote"
+          v-bind:layer="layer + 1"
           v-bind:parentNote="note"
           v-bind:key="childNote.id"
           @delete="onClickDelete"
@@ -49,6 +50,7 @@ export default {
   props: [
     'note',
     'parentNote',
+    'layer',
   ],
   methods: {
     onMouseOver : function() {
