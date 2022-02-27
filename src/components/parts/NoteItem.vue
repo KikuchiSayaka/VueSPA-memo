@@ -26,22 +26,24 @@
         </div>
       </template>
     </div>
-    <div class="child-note">
+    <draggable v-bind:list="note.children" group="notes">
       <div class="child-note">
-        <NoteItem
-          v-for="childNote in note.children"
-          v-bind:note="childNote"
-          v-bind:layer="layer + 1"
-          v-bind:parentNote="note"
-          v-bind:key="childNote.id"
-          @delete="onClickDelete"
-          @editStart="onClickEdit"
-          @editEnd="onEditEnd"
-          @addChild="onClickChildNote"
-          @addNoteAfter="onClickAddNoteAfter"
-        />
+        <div class="child-note">
+          <NoteItem
+            v-for="childNote in note.children"
+            v-bind:note="childNote"
+            v-bind:layer="layer + 1"
+            v-bind:parentNote="note"
+            v-bind:key="childNote.id"
+            @delete="onClickDelete"
+            @editStart="onClickEdit"
+            @editEnd="onEditEnd"
+            @addChild="onClickChildNote"
+            @addNoteAfter="onClickAddNoteAfter"
+          />
+        </div>
       </div>
-    </div>
+    </draggable>
   </div>
 </template>
 

@@ -4,6 +4,8 @@
 <!-- 画面左側のサイドメニュー。
         メモの名称編集時、Enterキーを押さないでも入力窓以外をクリックしたら編集完了にするため、@click.self="onEditNoteEnd()"を追加。また、普通に@click=""だと 子要素の編集ボタンが押されただけで編集完了になってしまうので、それを防ぐために@click.self=""でそれ自身が呼ばれたら、と指定する。 -->
     <div class="left-menu" @click.self="onEditNoteEnd()">
+      <!-- Vue.Draggableパッケージで、ノート名のドラッグ移動が可能に -->
+      <draggable v-bind:list="noteList" group="notes">
       <!-- @deleteでNoteItemコンポーネントで削除ボタンが押された場合、受け取ってonDeleteNoteに渡す -->
         <!--
             1. 削除ボタンをクリックするとonClickDelete関数が呼ばれる
@@ -11,17 +13,18 @@
             3. MainPage.vue側でイベント発火を@deleteで受けると@deleteに紐付けられたonDeleteNote関数が呼ばれる
             4. ノートリストの中から、渡されたnote情報に該当する要素を削除する
         -->
-      <NoteItem
-        v-for="note in noteList"
-        v-bind:note="note"
-        v-bind:layer="1"
-        v-bind:key="note.id"
-        @delete="onDeleteNote"
-        @editStart="onEditNoteStart"
-        @editEnd="onEditNoteEnd"
-        @addChild="onAddChildNote"
-        @addNoteAfter="onAddNoteAfter"
-      />
+        <NoteItem
+          v-for="note in noteList"
+          v-bind:note="note"
+          v-bind:layer="1"
+          v-bind:key="note.id"
+          @delete="onDeleteNote"
+          @editStart="onEditNoteStart"
+          @editEnd="onEditNoteEnd"
+          @addChild="onAddChildNote"
+          @addNoteAfter="onAddNoteAfter"
+        />
+      </draggable>
 
       <button class="transparent" @click="onClickButtonAdd">
         <i class="fas fa-plus-square"></i>ノートを追加
@@ -38,6 +41,7 @@
 
 <script>
 import NoteItem from '@/components/parts/NoteItem.vue'
+import draggable from 'vuedraggable'
 
 export default {
   data(){
@@ -102,6 +106,7 @@ export default {
   },
   components: {
     NoteItem,
+    draggable,
   },
 }
 </script>
