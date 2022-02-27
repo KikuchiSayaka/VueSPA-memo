@@ -20,6 +20,7 @@
         @editStart="onEditNoteStart"
         @editEnd="onEditNoteEnd"
         @addChild="onAddChildNote"
+        @addNoteAfter="onAddNoteAfter"
       />
 
       <button class="transparent" @click="onClickButtonAdd">
@@ -45,14 +46,27 @@ export default {
     }
   },
   methods : {
-    onClickButtonAdd : function() {
-      this.noteList.push({
+    // targetList：ノート追加先の配列
+    // layer：階層数。NoteItem.vue側で3階層までに制限している
+    // index：配列内のどこに追加するかの番号、未定義の場合は一番うしろに追加
+    onAddNoteCommon : function(targetList, layer, index) {
+      layer = layer || 1;
+      const note = {
         id : new Date().getTime().toString(16),
-        name : `新規ノート`,
+        name : `新規ノート-${layer}-${targetList.length}`,
         mouseover : false,
         editing : false,
         children : [],
-      })
+        layer : layer,
+      };
+      if (index == null) {
+        targetList.push(note);
+      } else {
+        targetList.splice(index + 1, 0, note);
+      }
+    },
+    onClickButtonAdd : function() {
+      this.onAddNoteCommon(this.noteList);
     },
     onDeleteNote : function(parentNote, note) {
       const targetList = parentNote == null ? this.noteList : parentNote.children;
@@ -77,13 +91,13 @@ export default {
       }
     },
     onAddChildNote : function(note) {
-      note.children.push({
-        id : new Date().getTime().toString(16),
-        name : note.name + 'の子',
-        mouseover : false,
-        editing : false,
-        children : [],
-      });
+      this.onAddNoteCommon(note.children, note.layer + 1);
+    },
+    onAddNoteAfter : function(parentNote, note) {
+      const targetList = parentNote == null ? this.noteList : parentNote.children;
+      const layer = parentNote == null ? 1 : note.layer;
+      const index = targetList.indexOf(note);
+      this.onAddNoteCommon(targetList, layer, index);
     },
   },
   components: {
